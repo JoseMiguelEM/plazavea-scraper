@@ -19,8 +19,8 @@ export async function setupBrowser() {
   const page = await browser.newPage();
   
   // Configurar timeouts
-  await page.setDefaultNavigationTimeout(30000);
-  await page.setDefaultTimeout(30000);
+  await page.setDefaultNavigationTimeout(40000);
+  await page.setDefaultTimeout(40000);
   
   // Configurar user agent
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36');

@@ -3,9 +3,8 @@ import { SELECTORS, EXCLUDED_CATEGORIES } from '../config/selectors.js';
 import { Logger } from './logger.js';
 import { formatCategories } from './formatter.js';
 import { BASE_URL } from '../config/config.js';
-
-// Función auxiliar para pausas
-const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+import { getAllProductsFromCategory } from './productUtils.js';
+import fs from 'fs/promises';
 
 export async function navigateToCategory(page, category) {
   try {
@@ -14,15 +13,31 @@ export async function navigateToCategory(page, category) {
     
     await page.goto(url, { 
       waitUntil: 'networkidle0',
-      timeout: 30000 
+      timeout: 40000 
     });
     
     const currentUrl = page.url();
     Logger.success(`Navegación exitosa a ${currentUrl}`);
+
+    // Extraer productos - AQUÍ ESTÁ EL CAMBIO
+    Logger.info(`Iniciando extracción de productos para ${category.name}`);
+    const products = await getAllProductsFromCategory(page, category.name); // Pasamos category.name explícitamente
     
+    // Guardar productos en archivo
+    const fileName = `products_${category.nameFormatted}.json`;
+    await fs.writeFile(
+      fileName,
+      JSON.stringify({ 
+        category: category.name,
+        total: products.length,
+        products 
+      }, null, 2)
+    );
+    
+    Logger.success(`Se extrajeron ${products.length} productos de ${category.name}`);
     return true;
   } catch (error) {
-    Logger.error(`Error navegando a categoría ${category.name}:`, error);
+    Logger.error(`Error en categoría ${category.name}:`, error);
     return false;
   }
 }
@@ -33,7 +48,7 @@ export async function getCategories(page) {
     
     const menuButton = await page.waitForSelector(SELECTORS.NAVIGATION.MENU_BUTTON, {
       visible: true,
-      timeout: 30000
+      timeout: 40000
     });
 
     if (!menuButton) {
@@ -52,7 +67,8 @@ export async function getCategories(page) {
       const categories = document.querySelectorAll('span[data-section="categories"]');
       return [...categories].map(category => ({
         name: category.textContent.trim(),
-        url: ''
+        url: '',
+        nameFormatted: '' // Agregamos esta propiedad que será llenada por formatCategories
       }));
     });
 
@@ -83,8 +99,7 @@ export async function navigateAllCategories(page, categories) {
     }
 
     await navigateToCategory(page, category);
-    // Usar la nueva función wait en lugar de waitForTimeout
-    await wait(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
     processedCount++;
   }
   

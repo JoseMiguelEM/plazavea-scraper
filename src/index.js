@@ -14,7 +14,7 @@ async function main() {
     Logger.info(`Navegando a ${BASE_URL}...`);
     await page.goto(BASE_URL, { 
       waitUntil: 'networkidle0',
-      timeout: 30000 
+      timeout: 40000 
     });
     
     Logger.info('Obteniendo categorías...');

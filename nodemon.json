@@ -1,7 +1,14 @@
 {
-    "ignore": [
-      "temp-categories.json",
-      "dom-debug.json",
-      "*.log"
-    ]
-  }
+  "ignore": [
+    "temp-categories.json",
+    "dom-debug.json",
+    "*.log",
+    "data/*",
+    "products_*.json",
+    "*.json"
+  ],
+  "delay": 2500,
+  "watch": [
+    "src/"
+  ]
+}
