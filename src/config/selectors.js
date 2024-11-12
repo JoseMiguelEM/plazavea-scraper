@@ -1,10 +1,13 @@
-export const selectors = { 
-    categoryMenu: '.MainMenu__wrapper__departments__item', 
-    categoryName: '.textMenu span', 
-    productCard: '.Showcase__content', 
-    productName: '.Showcase__name', 
-    productBrand: '.Showcase__brand a', 
-    productPrice: '.Showcase__salePrice', 
-    productSeller: '.Showcase__SellerName', 
-    nextPageButton: '.pagination__item.page-control.next' 
-};
+// src/config/selectors.js
+export const SELECTORS = {
+    NAVIGATION: {
+      MENU_BUTTON: "#menu-button-desktop",
+      CATEGORIES: 'span[data-section="categories"]',
+      ALTERNATIVE_CATEGORIES: [
+        '.MainMenu__wrapper a',
+        '#menu-categories a',
+        'div[data-menu-content="true"] a'
+      ],
+      MENU_WRAPPER: '.MainMenu__wrapper'
+    }
+  };

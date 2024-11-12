@@ -4,10 +4,16 @@ import { BASE_URL } from '../config/config.js';
 
 export async function setupBrowser() {
   const browser = await puppeteer.launch({
-    headless: 'new',
-    defaultViewport: { width: 1366, height: 768 },
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    timeout: 30000
+    headless: false,
+    defaultViewport: null,  // Esto permitirá que la ventana se ajuste al tamaño máximo
+    args: [
+      '--start-maximized',
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--disable-gpu'
+    ]
   });
 
   const page = await browser.newPage();
@@ -16,16 +22,11 @@ export async function setupBrowser() {
   await page.setDefaultNavigationTimeout(30000);
   await page.setDefaultTimeout(30000);
   
-  // Interceptar y bloquear recursos innecesarios
-  await page.setRequestInterception(true);
-  page.on('request', (request) => {
-    if (['image', 'stylesheet', 'font'].includes(request.resourceType())) {
-      request.abort();
-    } else {
-      request.continue();
-    }
-  });
+  // Configurar user agent
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36');
+
+  // Habilitar JavaScript
+  await page.setJavaScriptEnabled(true);
 
   return { browser, page };
 }
-

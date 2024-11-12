@@ -1,0 +1,7 @@
+{
+    "ignore": [
+      "temp-categories.json",
+      "dom-debug.json",
+      "*.log"
+    ]
+  }
