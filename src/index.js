@@ -1,23 +1,24 @@
 // src/index.js
 import { setupBrowser } from './utils/browser.js';
 import { BASE_URL } from './config/config.js';
+import { Logger } from './utils/logger.js';
 
 async function main() {
   try {
-    console.log('Iniciando scraper...');
+    Logger.info('Iniciando scraper...');
     const { browser, page } = await setupBrowser();
     
-    console.log(`Navegando a ${BASE_URL}...`);
+    Logger.info(`Navegando a ${BASE_URL}...`);
     await page.goto(BASE_URL, { waitUntil: 'networkidle0' });
     
-    console.log('Navegación exitosa!');
+    Logger.success('Navegación exitosa!');
     const title = await page.title();
-    console.log(`Título de la página: ${title}`);
+    Logger.info(`Título de la página: ${title}`);
     
     await browser.close();
-    console.log('Browser cerrado correctamente');
+    Logger.success('Browser cerrado correctamente');
   } catch (error) {
-    console.error('Error en la ejecución:', error);
+    Logger.error('Error en la ejecución:', error);
     process.exit(1);
   }
 }
