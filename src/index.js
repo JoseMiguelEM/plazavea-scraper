@@ -1,6 +1,6 @@
 // src/index.js
 import { setupBrowser } from './utils/browser.js';
-import { getCategories } from './utils/navigation.js';
+import { getCategories, navigateAllCategories } from './utils/navigation.js';
 import { Logger } from './utils/logger.js';
 import { BASE_URL } from './config/config.js';
 
@@ -20,9 +20,11 @@ async function main() {
     Logger.info('Obteniendo categorías...');
     const categories = await getCategories(page);
     
-    Logger.info(`Proceso completado. Se encontraron ${categories.length} categorías`);
+    Logger.info(`Iniciando navegación por ${categories.length} categorías...`);
+    await navigateAllCategories(page, categories);
+    
+    Logger.success('Proceso completado exitosamente');
     await browser.close();
-    Logger.success('Browser cerrado correctamente');
   } catch (error) {
     Logger.error('Error en la ejecución:', error);
     if (browser) {
